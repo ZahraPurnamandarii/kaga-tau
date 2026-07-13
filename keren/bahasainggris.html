@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🌿 My Personal English Assistant</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f3f6f4; 
+            color: #2b3630;
+            margin: 0;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: #ffffff;
+            padding: 24px 20px;
+            border-radius: 24px;
+            box-shadow: 0 16px 32px rgba(114, 137, 119, 0.08);
+            border: 1px solid rgba(163, 184, 153, 0.3);
+            margin-top: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #4a5d4e;
+            margin-top: 0;
+            margin-bottom: 4px;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .menu-days {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #e3eae5;
+            color: #3e4a41;
+            border: none;
+            padding: 14px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        button:active {
+            transform: scale(0.97);
+            background-color: #d1ded6;
+        }
+        button:disabled {
+            background-color: #eaeaea !important;
+            color: #aaaaaa !important;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        button.btn-review {
+            background-color: #728977;
+            color: #ffffff;
+            grid-column: span 2;
+            padding: 16px;
+            font-size: 14px;
+            box-shadow: 0 4px 14px rgba(114, 137, 119, 0.25);
+        }
+        button.btn-review:active {
+            background-color: #5b6f60;
+        }
+        button.btn-forum {
+            background-color: #eef2ef;
+            color: #4a5d4e;
+            grid-column: span 2;
+            padding: 14px;
+            font-size: 13px;
+            border: 1px dashed #a3b899;
+        }
+        button.btn-forum:active {
+            background-color: #d1ded6;
+        }
+        .display-area {
+            margin-top: 15px;
+            padding: 18px;
+            background-color: #f7f9f7;
+            border-radius: 16px;
+            min-height: 160px;
+            border: 1px solid #e9eee9;
+            border-left: 6px solid #728977;
+        }
+        .vocab-card {
+            margin-bottom: 12px;
+            padding: 16px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.01);
+            border: 1px solid #e9eee9;
+        }
+        .vocab-card-header {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            width: 100%;
+        }
+        .audio-btn {
+            background-color: #728977;
+            color: #ffffff;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 8px;
+            margin-left: 8px;
+            flex-shrink: 0;
+        }
+        .audio-btn:active {
+            background-color: #5b6f60;
+        }
+        .pronunciation {
+            color: #5b6f60;
+            font-size: 12px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 4px;
+            margin-bottom: 6px;
+            background: #eef2ef;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .study-notes {
+            background-color: #f4f7f5;
+            border: 1px solid #e3eae5;
+            border-radius: 8px;
+            padding: 14px;
+            margin-top: 12px;
+            margin-bottom: 16px;
+            text-align: left;
+            font-size: 12px;
+            color: #4a5d4e;
+            line-height: 1.6;
+        }
+        .study-notes ul {
+            margin: 6px 0 0 0;
+            padding-left: 16px;
+        }
+        .voice-section {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px dashed #e9eee9;
+            text-align: center;
+        }
+        .mic-btn {
+            background-color: #c96f53;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+        .mic-btn:active {
+            background-color: #b05c43;
+        }
+        .feedback-text {
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+        .nav-vocab-btn {
+            background-color: #4a5d4e;
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+            padding: 12px;
+        }
+        .btn-start-practice {
+            background-color: #728977;
+            color: white;
+            width: 100%;
+            padding: 14px;
+            font-size: 14px;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(114, 137, 119, 0.2);
+        }
+
+        /* --- BUTTON UNTUK BACK KE KATA SEBELUMNYA --- */
+        .btn-back-vocab {
+            background-color: #e3eae5;
+            color: #4a5d4e;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 8px;
+        }
+
+        /* --- STYLING SEKSI MENGETIK --- */
+        .typing-section {
+            margin-top: 4px;
+            text-align: left;
+        }
+        .typing-section label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #4a5d4e;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .typing-section input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e3eae5;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #2b3630;
+            font-weight: 600;
+        }
+        .typing-section input:focus {
+            outline: none;
+            border-color: #728977;
+        }
+        .btn-verify-typing {
+            background-color: #728977;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            font-size: 13px;
+            border-radius: 8px;
+        }
+
+        /* --- ANIMASI BUNGA PADI BERGOYANG --- */
+        @keyframes sway {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(15deg) scale(1.1); }
+            100% { transform: rotate(0deg); }
+        }
+        .animated-padi {
+            display: inline-block;
+            font-size: 40px;
+            animation: sway 2s infinite ease-in-out;
+            margin-bottom: 10px;
+        }
+
+        /* --- STYLING POP-UP BINTANG PADA MODAL --- */
+        .popup-stars {
+            font-size: 28px;
+            color: #d1ded6;
+            margin: 8px 0;
+            letter-spacing: 4px;
+        }
+        .popup-stars .gold {
+            color: #f5c453;
+        }
+
+        /* --- STYLING CUSTOM CUTE MODAL SAGE GREEN --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(43, 54, 48, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            opacity: 1; pointer-events: auto;
+        }
+        .cute-modal {
+            background: #ffffff;
+            padding: 26px 20px;
+            border-radius: 24px;
+            max-width: 340px;
+            width: 100%;
+            text-align: center;
+            border: 3px solid #a3b899;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal-overlay.active .cute-modal {
+            transform: scale(1);
+        }
+        .cute-modal h3 {
+            margin: 0 0 8px 0;
+            color: #4a5d4e;
+            font-size: 20px;
+            font-weight: 800;
+        }
+        .cute-modal p {
+            margin: 0 0 14px 0;
+            color: #5b6f60;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        .cute-modal button {
+            background-color: #728977;
+            color: white;
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(114, 137, 119, 0.2);
+        }
+        
+        /* Quiz Styles */
+        .quiz-box { text-align: center; width: 100%; }
+        .quiz-box input {
+            width: 100%; padding: 14px; margin-top: 12px; margin-bottom: 12px;
+            border: 2px solid #e3eae5; border-radius: 12px; font-size: 16px;
+            color: #3e4a41; font-weight: 600; text-align: center;
+        }
+        .quiz-box input:focus { outline: none; border-color: #728977; }
+        .quiz-box button.btn-submit { background-color: #728977; color: white; width: 100%; padding: 14px; font-size: 14px; }
+        .quiz-box button.btn-audio-quiz { background-color: #e3eae5; color: #3e4a41; width: 100%; margin-bottom: 8px; }
+
+        /* --- STYLING DAFTAR VOCAB LIST --- */
+        .vocab-list-btn {
+            background-color: #eef2ef;
+            color: #4a5d4e;
+            width: 100%;
+            padding: 12px;
+            font-size: 13px;
+            margin-top: 8px;
+            border: 1px dashed #a3b899;
+        }
+        .vocab-list-panel {
+            margin-top: 8px;
+            text-align: left;
+        }
+        .vocab-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: #ffffff;
+            border: 1px solid #e9eee9;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+        .vocab-list-item .vli-word {
+            font-weight: 800;
+            color: #3e4a41;
+            font-size: 14px;
+        }
+        .vocab-list-item .vli-meaning {
+            font-size: 12px;
+            color: #728977;
+            font-weight: 600;
+        }
+        .vocab-list-item .vli-mini-audio {
+            background-color: #e3eae5;
+            color: #4a5d4e;
+            padding: 6px 10px;
+            font-size: 11px;
+            border-radius: 8px;
+            margin-left: 8px;
+            flex-shrink: 0;
+        }
+        .forum-day-header {
+            width: 100%;
+            background-color: #f4f7f5;
+            color: #4a5d4e;
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e3eae5;
+        }
+        .forum-day-header:active {
+            background-color: #e3eae5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="main-header-area">
+        <h1>🌿 Vocab Assistant</h1>
+        <p style="text-align: center; color: #728977; margin: 0; font-size: 13px; font-weight: 600;">Target: 20 Essential Words / Week</p>
+        
+        <div class="menu-days">
+            <button id="btn-Day1" onclick="loadDay('Day 1')">📅 Day 1</button>
+            <button id="btn-Day2" onclick="loadDay('Day 2')">🔒 Day 2</button>
+            <button id="btn-Day3" onclick="loadDay('Day 3')">🔒 Day 3</button>
+            <button id="btn-Day4" onclick="loadDay('Day 4')">🔒 Day 4</button>
+            <button id="btn-Day5" onclick="loadDay('Day 5')">🔒 Day 5</button>
+            <button id="btn-vocab-forum" class="btn-forum" onclick="showVocabForum()">📋 Daftar Semua Vocab</button>
+            <button id="btn-Final" class="btn-review" onclick="startQuiz()">🎓 Day 6 & 7: Final Test</button>
+        </div>
+    </div>
+
+    <div id="content" class="display-area">
+        <p id="init-msg" style="text-align: center; color: #a3b0a6; margin-top: 40px; font-size: 14px;">Memuat status progress checklist...</p>
+    </div>
+</div>
+
+<div id="cutePopUp" class="modal-overlay">
+    <div class="cute-modal">
+        <div class="animated-padi">🌾</div>
+        <h3 id="modalTitle">Bener Banget!</h3>
+        <div id="modalStars" class="popup-stars"></div>
+        <p id="modalMessage">Pesan pop-up estetik di sini...</p>
+        <button onclick="closeCuteModal()">Oke, Siap! 🌿</button>
+    </div>
+</div>
+
+<script>
+const vocabDays = {
+    "Day 1": [
+        { word: "Accurate", meaning: "Tepat / Akurat", reading: "ak-yuh-rut" },
+        { word: "Collaborate", meaning: "Bekerja sama", reading: "kuh-la-buh-reyt" },
+        { word: "Environment", meaning: "Lingkungan", reading: "en-vahy-ruhn-muhnt" },
+        { word: "Intrusion", meaning: "Gangguan / Penyusupan", reading: "in-troo-zhuhn" }
+    ],
+    "Day 2": [
+        { word: "Evaluate", meaning: "Menilai / Mengevaluasi", reading: "ih-val-yoo-eyt" },
+        { word: "Analyze", meaning: "Menganalisis", reading: "an-uh-lahyz" },
+        { word: "Implement", meaning: "Melaksanakan / Menerapkan", reading: "im-pluh-ment" },
+        { word: "Maintain", meaning: "Merawat / Menjaga", reading: "meyn-teyn" }
+    ],
+    "Day 3": [
+        { word: "Develop", meaning: "Mengembangkan", reading: "dih-vel-uhp" },
+        { word: "Secure", meaning: "Aman / Mengamankan", reading: "si-kyoor" },
+        { word: "Efficient", meaning: "Efisien / Tepat guna", reading: "ih-fish-uhnt" },
+        { word: "Structure", meaning: "Struktur / Susunan", reading: "struhk-cher" }
+    ],
+    "Day 4": [
+        { word: "Network", meaning: "Jaringan", reading: "net-wurk" },
+        { word: "Protocol", meaning: "Protokol / Aturan resmi", reading: "proh-tuh-kol" },
+        { word: "Access", meaning: "Akses / Jalan masuk", reading: "ak-ses" },
+        { word: "Identify", meaning: "Mengidentifikasi", reading: "ahy-den-tuh-fahy" }
+    ],
+    "Day 5": [
+        { word: "Process", meaning: "Proses / Mengolah", reading: "proh-ses" },
+        { word: "Support", meaning: "Mendukung / Dukungan", reading: "suh-pawrt" },
+        { word: "Transfer", meaning: "Memindahkan / Transfer", reading: "trans-fur" },
+        { word: "Verify", meaning: "Memverifikasi / Memeriksa", reading: "ver-uh-fahy" }
+    ]
+};
+
+let currentDayName = "";
+let userProgress = JSON.parse(localStorage.getItem('vocab_checklist_progress')) || {
+    unlockedDay: 1
+};
+
+let currentDayWords = [];
+let currentWordIndex = 0;
+let isTypingPhase = false;
+let isVocabListOpen = false;
+
+// --- EFEK SUARA GEMES UNTUK POP UP ---
+let audioCtx = null;
+function getAudioCtx() {
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    return audioCtx;
+}
+
+function playPopupSound(type = 'success') {
+    try {
+        const ctx = getAudioCtx();
+        const now = ctx.currentTime;
+
+        // Nada-nada kecil bernuansa "gemes" ala lonceng/bel kecil
+        const notesSuccess = [880, 1108.73, 1318.51]; // A5, C#6, E6 (arpeggio ceria)
+        const notesTry = [523.25, 415.30]; // turun sedikit, nada "yah gapapa"
+        const notes = type === 'success' ? notesSuccess : notesTry;
+
+        notes.forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+
+            const startTime = now + i * 0.11;
+            gain.gain.setValueAtTime(0.0001, startTime);
+            gain.gain.exponentialRampToValueAtTime(0.18, startTime + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.28);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.start(startTime);
+            osc.stop(startTime + 0.3);
+        });
+    } catch (e) {
+        // Kalau browser tidak mendukung Web Audio API, abaikan saja diam-diam
+        console.log("Audio tidak tersedia:", e);
+    }
+}
+
+function showCuteModal(title, msg, starsCount = 0) {
+    document.getElementById('modalTitle').innerText = title;
+    document.getElementById('modalMessage').innerText = msg;
+    
+    let starsHtml = "";
+    if (starsCount > 0) {
+        for (let i = 1; i <= 5; i++) {
+            if (i <= starsCount) starsHtml += '<span class="gold">★</span>';
+            else starsHtml += '<span>★</span>';
+        }
+    }
+    document.getElementById('modalStars').innerHTML = starsHtml;
+    document.getElementById('cutePopUp').classList.add('active');
+
+    // Mainkan efek suara gemes: nada ceria kalau bintang bagus/tanpa bintang(info), nada lembut kalau harus coba lagi
+    playPopupSound(starsCount > 0 && starsCount < 3 ? 'tryagain' : 'success');
+}
+
+function closeCuteModal() {
+    document.getElementById('cutePopUp').classList.remove('active');
+    if (isTypingPhase) {
+        switchToTypingUI();
+    }
+}
+
+function updateDayLocks() {
+    for (let i = 1; i <= 5; i++) {
+        const btn = document.getElementById(`btn-Day${i}`);
+        if (btn) {
+            if (i === 1 || i <= userProgress.unlockedDay) {
+                btn.disabled = false;
+                btn.innerHTML = `📅 Day ${i}`;
+            } else {
+                btn.disabled = true;
+                btn.innerHTML = `🔒 Day ${i}`;
+            }
+        }
+    }
+    const finalBtn = document.getElementById('btn-Final');
+    if (finalBtn) finalBtn.disabled = (userProgress.unlockedDay < 5);
+}
+
+setTimeout(() => {
+    updateDayLocks();
+    document.getElementById('init-msg').innerText = "Pilih menu di atas untuk mulai belajar atau setor hafalan!";
+}, 100);
+
+function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.82; 
+    window.speechSynthesis.speak(utterance);
+}
+
+// --- FITUR BARU: FORUM DAFTAR SEMUA VOCAB YANG AKAN DIHAFAL ---
+let openForumDay = null;
+
+function showVocabForum() {
+    document.getElementById('main-header-area').style.display = 'none';
+    document.getElementById('content').style.borderLeftColor = "#a3b899";
+    openForumDay = null;
+    renderVocabForum();
+}
+
+function toggleForumDay(day) {
+    openForumDay = (openForumDay === day) ? null : day;
+    renderVocabForum();
+}
+
+function renderVocabForum() {
+    let sectionsHtml = "";
+    for (let day in vocabDays) {
+        let dayNum = parseInt(day.replace("Day ", ""));
+        let isLocked = dayNum > userProgress.unlockedDay;
+        let words = vocabDays[day];
+        let isOpen = (openForumDay === day);
+
+        let itemsHtml = "";
+        if (isOpen) {
+            itemsHtml = words.map(item => `
+                <div class="vocab-list-item">
+                    <div>
+                        <div class="vli-word">${item.word}</div>
+                        <div class="vli-meaning">${item.meaning}</div>
+                    </div>
+                    <button class="vli-mini-audio" onclick="speak('${item.word}')">🔊</button>
+                </div>
+            `).join('');
+        }
+
+        sectionsHtml += `
+            <div style="margin-bottom: 10px;">
+                <button class="forum-day-header" onclick="toggleForumDay('${day}')">
+                    <span>${isLocked ? '🔒' : '📅'} ${day} (${words.length} kata)</span>
+                    <span>${isOpen ? '▲' : '▼'}</span>
+                </button>
+                ${isOpen ? `<div class="vocab-list-panel" style="display:block;">${itemsHtml}</div>` : ''}
+            </div>
+        `;
+    }
+
+    let html = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <button class="btn-back-vocab" onclick="exitToMenu()">🏠 Menu</button>
+            <h2 style="color:#4a5d4e; margin:0; font-size:16px; font-weight:800;">📋 Daftar Semua Vocab</h2>
+            <span style="width:1px;"></span>
+        </div>
+        ${sectionsHtml}
+    `;
+    document.getElementById('content').innerHTML = html;
+}
+
+// --- BARU: LAYAR SETELAH PILIH DAY (TAMPILIN NOTES DULUAN) ---
+function loadDay(day) {
+    document.getElementById('main-header-area').style.display = 'none';
+    currentDayName = day;
+    document.getElementById('content').style.borderLeftColor = "#728977";
+    currentDayWords = vocabDays[day];
+    currentWordIndex = 0;
+    isTypingPhase = false;
+    isVocabListOpen = false;
+
+    let html = `
+        <div style="display:flex; justify-content:between; align-items:center; margin-bottom:12px;">
+            <button class="btn-back-vocab" onclick="exitToMenu()">🏠 Menu</button>
+            <h2 style="color:#4a5d4e; margin:0; font-size:16px; font-weight:800; text-align:right; flex-grow:1;">📖 Persiapan ${day}</h2>
+        </div>
+        
+        <div class="study-notes">
+            <strong style="font-size: 13px; color: #3e4a41; display:block; margin-bottom:6px;">💡 Alur Metode Hafalan Efektif:</strong>
+            Sebelum mulai, pahami langkah latihan berikut biar hafalan melekat luar kepala:
+            <ul>
+                <li><strong>Langkah 1 (Voice):</strong> Dengarkan audio kata, lalu tekan tombol mikrofon merah untuk melatih pengucapan (*pronunciation*).</li>
+                <li><strong>Langkah 2 (Typing):</strong> Setelah lolos ucapan, detail petunjuk akan disembunyikan. Kamu wajib mengetik ejaan kata & artinya dengan tepat dari ingatanmu.</li>
+            </ul>
+        </div>
+
+        <button class="btn-start-practice" onclick="showSingleVocab()">Mulai Latihan ➔</button>
+    `;
+    document.getElementById('content').innerHTML = html;
+}
+
+function generateNavigationHeader() {
+    let backButtonHtml = currentWordIndex > 0 
+        ? `<button class="btn-back-vocab" onclick="previousVocab()">⬅ Kembali</button>` 
+        : `<button class="btn-back-vocab" onclick="loadDay('${currentDayName}')">🏠 Awal</button>`;
+
+    let stepText = isTypingPhase ? "Langkah 2: Typing" : "Langkah 1: Voice";
+
+    return `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            ${backButtonHtml}
+            <h2 style="color:#4a5d4e; margin:0; font-size:15px; font-weight:700;">📖 (${currentWordIndex + 1}/${currentDayWords.length})</h2>
+            <span style="font-size:11px; font-weight:700; color:#728977;">${stepText}</span>
+        </div>
+    `;
+}
+
+// --- AREA KARTU LATIHAN SEKARANG BERSIH TANPA NOTES ---
+function showSingleVocab() {
+    isTypingPhase = false;
+    let item = currentDayWords[currentWordIndex];
+    let isLast = currentWordIndex === currentDayWords.length - 1;
+
+    let html = `
+        ${generateNavigationHeader()}
+        
+        <div id="main-vocab-card" class="vocab-card" style="padding: 24px 16px;">
+            <div class="vocab-card-header">
+                <strong style="font-size: 24px; color:#4a5d4e; font-weight:800;">${item.word}</strong> 
+                <button class="audio-btn" onclick="speak('${item.word}')">🔊 Listen</button>
+            </div>
+            <div class="pronunciation" style="margin-top: 8px; margin-bottom: 12px;">Cara baca: [${item.reading}]</div>
+            <div style="font-size: 16px; color:#2b3630; margin-bottom: 8px;">Arti: <strong>${item.meaning}</strong></div>
+            
+            <div class="voice-section" style="margin-top: 20px;">
+                <button id="btn-check-voice" class="mic-btn" onclick="startVoiceRecognition('${item.word}')" style="padding: 12px;">🎙️ Jalankan Tes Pengucapan</button>
+                <div id="voice-feedback" class="feedback-text" style="color: #a3b0a6; margin-top: 8px;">Mikrofon Standby...</div>
+            </div>
+        </div>
+        
+        <button id="btn-next-vocab" class="nav-vocab-btn" onclick="nextVocab()" disabled>
+            ${isLast ? '✅ Selesaikan Hari Ini' : 'Lanjut Kata Berikutnya ➔'}
+        </button>
+    `;
+    document.getElementById('content').innerHTML = html;
+}
+
+function switchToTypingUI() {
+    let item = currentDayWords[currentWordIndex];
+    let card = document.getElementById('main-vocab-card');
+    
+    if (card) {
+        card.innerHTML = `
+            <div class="typing-section">
+                <span style="font-size: 14px; font-weight:700; color:#c96f53; display:block; margin-bottom:12px; text-align:center;">📝 Langkah 2: Uji Ingatan Ejaan & Arti!</span>
+                
+                <label>Ketik Kata Bahasa Inggris yang Tadi Diucapkan:</label>
+                <input type="text" id="typeWord" placeholder="Ketik kata bahasa inggrisnya..." autocomplete="off">
+                
+                <label>Ketik Arti Katanya dalam Bahasa Indonesia:</label>
+                <input type="text" id="typeMeaning" placeholder="Ketik artinya..." autocomplete="off">
+                
+                <button class="btn-verify-typing" onclick="verifyTyping('${item.word}', '${item.meaning}')">Periksa Tulisan Saya</button>
+            </div>
+        `;
+        
+        const stepIndicator = document.querySelector('.display-area span');
+        if (stepIndicator) stepIndicator.innerText = "Langkah 2: Typing";
+        
+        setTimeout(() => {
+            const inp = document.getElementById('typeWord');
+            if (inp) inp.focus();
+        }, 50);
+    }
+}
+
+function previousVocab() {
+    if (currentWordIndex > 0) {
+        currentWordIndex--;
+        showSingleVocab();
+    }
+}
+
+function exitToMenu() {
+    document.getElementById('main-header-area').style.display = 'block';
+    document.getElementById('content').innerHTML = `
+        <p style="text-align: center; color: #a3b0a6; margin-top: 40px; font-size: 14px;">Pilih menu di atas untuk mulai belajar atau setor hafalan!</p>
+    `;
+}
+
+function getSimilarity(s1, s2) {
+    let longer = s1.length > s2.length ? s1 : s2;
+    let shorter = s1.length > s2.length ? s2 : s1;
+    if (longer.length === 0) return 1.0;
+    
+    let costs = new Array();
+    for (let i = 0; i <= s1.length; i++) {
+        let lastValue = i;
+        for (let j = 0; j <= s2.length; j++) {
+            if (i == 0) costs[j] = j;
+            else {
+                if (j > 0) {
+                    let newValue = costs[j - 1];
+                    if (s1.charAt(i - 1) != s2.charAt(j - 1))
+                        newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                    costs[j - 1] = lastValue;
+                    lastValue = newValue;
+                }
+            }
+        }
+        if (i > 0) costs[s2.length] = lastValue;
+    }
+    return (longer.length - costs[s2.length]) / parseFloat(longer.length);
+}
+
+function startVoiceRecognition(targetWord) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        showCuteModal("Waduh! ⚠️", "Maaf, HP atau Browser kamu belum mendukung fitur perekaman suara bawaan ini.");
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    const feedback = document.getElementById('voice-feedback');
+    feedback.innerText = "🎙️ Mendengarkan... Ucapkan sekarang!";
+    feedback.style.color = "#c96f53";
+
+    recognition.start();
+
+    recognition.onresult = function(event) {
+        const userSpeech = event.results[0][0].transcript.trim().toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+        const targetClean = targetWord.toLowerCase().trim();
+
+        let similarity = getSimilarity(userSpeech, targetClean);
+        let stars = 1;
+        if (similarity >= 0.85) stars = 5;
+        else if (similarity >= 0.65) stars = 4;
+        else if (similarity >= 0.45) stars = 3;
+        else if (similarity >= 0.25) stars = 2;
+
+        if (stars >= 3) {
+            isTypingPhase = true;
+            showCuteModal(
+                "Pengucapan Bagus! 🌾", 
+                `Ucapanmu dinilai pas! Klik tombol di bawah untuk langsung menguji ingatan ketikanmu.`, 
+                stars
+            );
+        } else {
+            showCuteModal(
+                "Yuk Coba Lagi 🥺", 
+                `Artikulasi kurang pas sedikit. Terdengar: "${event.results[0][0].transcript}"`, 
+                stars
+            );
+            feedback.innerText = `❌ Nilai terlalu rendah (${stars} ⭐). Silakan ulangi ucapan!`;
+            feedback.style.color = "#c96f53";
+        }
+    };
+
+    recognition.onerror = function() {
+        feedback.innerText = "⚠️ Gagal menangkap suara. Coba lagi.";
+        feedback.style.color = "#c96f53";
+    };
+}
+
+function verifyTyping(targetWord, targetMeaning) {
+    let userWord = document.getElementById('typeWord').value.trim().toLowerCase();
+    let userMeaning = document.getElementById('typeMeaning').value.trim().toLowerCase();
+    
+    let cleanTargetWord = targetWord.toLowerCase().trim();
+    let cleanTargetMeaning = targetMeaning.toLowerCase().trim();
+
+    if (userWord !== cleanTargetWord) {
+        showCuteModal("Penulisan Salah! 🥺", `Ejaan kata bahasa Inggris yang kamu masukkan belum tepat.`);
+        return;
+    }
+
+    if (userMeaning === "" || (!cleanTargetMeaning.includes(userMeaning) && !userMeaning.includes(cleanTargetMeaning.split(" / ")[0]))) {
+        showCuteModal("Arti Kurang Tepat! 🥺", `Arti kata yang kamu ketik belum cocok dengan kamus data.`);
+        return;
+    }
+
+    showCuteModal("Sempurna! ✨", "Mantap! Ejaan tulisan dan arti hafal luar kepala. Tombol lanjut sekarang terbuka!");
+    document.getElementById('btn-next-vocab').disabled = false;
+}
+
+function nextVocab() {
+    if (currentWordIndex < currentDayWords.length - 1) {
+        currentWordIndex++;
+        showSingleVocab();
+    } else {
+        let activeDayNum = parseInt(currentDayName.replace("Day ", ""));
+        if (activeDayNum === userProgress.unlockedDay && userProgress.unlockedDay < 5) {
+            userProgress.unlockedDay = activeDayNum + 1;
+            localStorage.setItem('vocab_checklist_progress', JSON.stringify(userProgress));
+            updateDayLocks();
+        }
+
+        showCuteModal(
+            "Target Hari Ini Sukses! 🌾", 
+            `Luar biasa! Seluruh rangkaian hafalan di ${currentDayName} telah sukses diselesaikan.`
+        );
+        
+        document.getElementById('main-header-area').style.display = 'block';
+        document.getElementById('content').innerHTML = `
+            <p style="text-align: center; color: #728977; font-weight:600; margin-top: 40px;">🎉 Target Hari Ini Sukses! Silakan pilih hari baru yang sudah terbuka kuncinya.</p>
+        `;
+    }
+}
+
+// --- LOGIKA UTAMA FINAL TEST ---
+let quizWords = [];
+let currentQuizIndex = 0;
+let score = 0;
+
+function startQuiz() {
+    document.getElementById('main-header-area').style.display = 'none';
+    document.getElementById('content').style.borderLeftColor = "#c96f53";
+    quizWords = [];
+    for (let day in vocabDays) {
+        quizWords = quizWords.concat(vocabDays[day]);
+    }
+    quizWords.sort(() => Math.random() - 0.5);
+    currentQuizIndex = 0;
+    score = 0;
+    showQuizQuestion();
+}
+
+function showQuizQuestion() {
+    if (currentQuizIndex >= quizWords.length) {
+        document.getElementById('main-header-area').style.display = 'block';
+        document.getElementById('content').innerHTML = `
+            <div style="text-align:center; padding: 10px 0;">
+                <h2 style="color:#4a5d4e; font-weight:800; font-size:18px;">🎉 Test Selesai!</h2>
+                <p style="font-size: 24px; margin: 12px 0; color:#728977;">Skor Kamu: <strong>${score} / ${quizWords.length}</strong></p>
+                <p style="color:#5b6f60; font-size: 13px; font-weight:600;">Perfect! Semua target mingguan sukses dihafal! 🌾</p>
+            </div>
+        `;
+        return;
+    }
+
+    let currentItem = quizWords[currentQuizIndex];
+    document.getElementById('content').innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <button class="btn-back-vocab" onclick="exitToMenu()">🏠 Keluar</button>
+            <h2 style="color:#4a5d4e; margin:0; font-weight:800; font-size:15px;">🎓 Quiz (${currentQuizIndex + 1}/${quizWords.length})</h2>
+            <span></span>
+        </div>
+        <div class="quiz-box">
+            <p style="color:#5b6f60; font-size: 13px; margin-bottom:12px;">Dengarkan kata, lalu ketik artinya:</p>
+            <button class="btn-audio-quiz" onclick="speak('${currentItem.word}')">🔊 Putar Suara</button><br>
+            <input type="text" id="userAnswer" placeholder="Ketik di sini..." autocomplete="off"><br>
+            <button class="btn-submit" onclick="checkAnswer()">Kirim Jawaban</button>
+        </div>
+    `;
+    setTimeout(() => {
+        const inp = document.getElementById('userAnswer');
+        if(inp) inp.focus();
+    }, 50);
+}
+
+function checkAnswer() {
+    let ans = document.getElementById('userAnswer').value.trim().toLowerCase();
+    let correctMeaning = quizWords[currentQuizIndex].meaning.toLowerCase();
+    
+    if (ans !== "" && (correctMeaning.includes(ans) || ans.includes(correctMeaning.split(" / ")[0]))) {
+        showCuteModal("Betul! 🌾", "Jawabanmu tepat sekali, pertahankan fokusmu!");
+        score++;
+    } else {
+        showCuteModal("Aww, Kurang Tepat 🥺", `Kata tadi: ${quizWords[currentQuizIndex].word}\nArtinya yang benar: ${quizWords[currentQuizIndex].meaning}`);
+    }
+    currentQuizIndex++;
+    showQuizQuestion();
+}
+</script>
+
+</body>
+</html>
